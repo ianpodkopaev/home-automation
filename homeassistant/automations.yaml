@@ -1,0 +1,59 @@
+- alias: "MQTT control for virtual lamps"
+  mode: parallel
+  trigger:
+    - platform: mqtt
+      topic: "virtual/+/set"
+    - platform: mqtt
+      topic: "virtual/+/brightness/set"
+
+  variables:
+    lamp_number: "{{ trigger.topic.split('/')[1] }}"
+    lamp_entity: "light.{{ lamp_number }}_light"
+
+  condition: []
+
+  action:
+    - choose:
+        - conditions: "{{ 'brightness' in trigger.topic }}"
+          sequence:
+            - condition: template
+              value_template: >
+                {{ states[lamp_entity].attributes.brightness != trigger.payload | int }}
+            - service: light.turn_on
+              target:
+                entity_id: "{{ lamp_entity }}"
+              data:
+                brightness: "{{ trigger.payload | int }}"
+
+        - conditions: "{{ trigger.payload in ['ON', 'OFF'] }}"
+          sequence:
+            - condition: template
+              value_template: >
+                {{ states[lamp_entity].state != trigger.payload.lower() }}
+            - service: light.turn_{{ trigger.payload | lower }}
+              target:
+                entity_id: "{{ lamp_entity }}"
+
+- alias: "Periodic Light Status to MQTT"
+  mode: single
+  trigger:
+    - platform: time_pattern
+      seconds: "/30"  # every minute
+  action:
+    - repeat:
+        count: 8
+        sequence:
+          - variables:
+              lamp_entity: "light.{{ repeat.index }}_light"
+              topic: "virtual/{{ repeat.index }}/status"
+              light_state: "{{ states[lamp_entity].state }}"
+              brightness: "{{ states[lamp_entity].attributes.brightness | default(0) }}"
+          - service: mqtt.publish
+            data:
+              topic: "{{ topic }}"
+              payload: >
+                {
+                  "state": "{{ light_state }}",
+                  "brightness": {{ brightness }}
+                }
+              retain: false

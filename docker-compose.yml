@@ -1,0 +1,86 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      - hanet
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/config/pwfile:/mosquitto/config/pwfile
+    security_opt:
+      - no-new-privileges:true
+
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+    networks:
+      - hanet
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=user
+      - DOCKER_INFLUXDB_INIT_PASSWORD=password1234
+      - DOCKER_INFLUXDB_INIT_ORG=some_org
+      - DOCKER_INFLUXDB_INIT_BUCKET=data_normal
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=…
+
+  telegraf:
+    image: telegraf
+    container_name: telegraf
+    restart: always
+    depends_on:
+      - mosquitto
+      - influxdb
+    networks:
+      - hanet
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    networks:
+      - hanet
+    ports:
+      - "8123:8123"
+    volumes:
+      - ./homeassistant/configuration.yaml:/config/configuration.yaml
+      - ./homeassistant/automations.yaml:/config/automations.yaml
+      - ./homeassistant/virtual.yaml:/config/virtual.yaml
+    environment:
+      - TZ=Europe/Minsk
+      
+  goskript:
+    build:
+      context: ./goskript
+      dockerfile: Dockerfile
+    container_name: goskript
+    restart: always
+    depends_on:
+      - mosquitto
+    networks:
+      - hanet
+    environment:
+      - MQTT_BROKER=tcp://mosquitto:1883
+      - CLIENT_ID=goskript
+      - MQTT_USER=
+      - MQTT_PASSWORD=
+
+
+networks:
+  hanet:
+    driver: bridge
+
+volumes:
+  influxdb-data:
+  influxdb-config:

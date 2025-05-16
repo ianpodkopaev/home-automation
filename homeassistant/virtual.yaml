@@ -1,0 +1,50 @@
+  Another Light:
+  - platform: light
+    name: 1 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+
+  - platform: light
+    name: 2 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+  - platform: light
+    name: 3 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+  - platform: light
+    name: 4 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+  - platform: light
+    name: 5 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+  - platform: light
+    name: 6 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+  - platform: light
+    name: 7 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true
+  - platform: light
+    name: 8 Light
+    initial_value: 'on'
+    support_brightness: true
+    initial_brightness: 100
+    initial_availability: true

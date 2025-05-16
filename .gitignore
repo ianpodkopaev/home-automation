@@ -1,0 +1,13 @@
+# .gitignore
+*.log
+*.exe
+*.out
+*.bin
+*.swp
+__pycache__/
+.vscode/
+.idea/
+.env
+/config/secrets.yaml
+/config/auth.json
+/config/*.db

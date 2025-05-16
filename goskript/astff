@@ -1,0 +1,109 @@
+for(int i=0; i<length(offIndexes); i++)
+{
+    if(offIndexes[i]==off)
+    {
+        //11011
+        if(offIndexes[i+1]==on)
+        {
+            offIndexes[i-2] publish 190
+            offIndexes[i-1] publish 128
+
+            offIndexes[i+1] publish 128
+            i=i+1
+            if(offIndexes[i+2]==on)
+            {
+              offIndexes[i+2] publish 190
+              i=i+2
+            }
+
+        }
+        //1001
+        if(offIndexes[i+1]==off)
+        {
+            for(int j=i+2; j<length(offIndexes)-i; j++)
+            {
+             if(offIndexes[j]==on)
+             {
+                offIndexes[j] publish 190
+                    if(offIndexes[j+1]==on)
+                    {
+                    offIndexes[j+1] publish 128
+                    }
+             for(int j=i+2; j>i-1; j--)
+                         {
+                          if(offIndexes[j]==on)
+                          {
+                             offIndexes[j] publish 190
+                             i=j
+                                 if(offIndexes[j-1]==on)
+                                 {
+                                 offIndexes[j-1] publish 128
+                                 i=j+1
+                                 }
+
+             }
+
+
+        }
+    }
+
+
+
+
+}
+
+
+
+
+
+
+
+for(int i=0;i<=length(offIndexes);i++)
+{
+    if(i==length(offIndexes))
+    {
+        if(offIndexes[i]==7)
+        {
+            publish offIndexes[i]+1 128
+        }
+        if(offIndexes[i]==6)
+        {
+                publish offIndexes[i]+1 128
+                publish offIndexes[i]+2 190
+        }
+        if(offIndexes[i]<=5)
+        {
+                publish offIndexes[i]+1 128
+                publish offIndexes[i]+2 190
+
+                publish offIndexes[i]+3 255
+        }
+    }
+
+    if(i=0 and offIndexes[i]>=4)
+    {
+        publish offIndexes[i]-1 128
+        publish offIndexes[i]-2 190
+        publish offIndexes[i]-3 255
+
+    }
+    if(i =0 and offIndexes[i]==3)
+        {
+            publish offIndexes[i]-2 190
+            publish offIndexes[i]-1 128
+        }
+
+    if(i =0 and offIndexes[i]==2)
+    {
+        publish offIndexes[i]-1 128
+    }
+    if(offIndexes[i+1]==offIndexes[i]+2)
+    {
+        publish offIndexes[i]+1 128
+        i++
+    }
+
+
+
+
+}
