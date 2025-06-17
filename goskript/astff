@@ -107,3 +107,38 @@ for(int i=0;i<=length(offIndexes);i++)
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+views:
+  - path: default_view
+    title: Home
+    cards:
+      - type: light
+        entity: light.1_light
+    badges:
+      - type: entity
+        entity: light.1_light
+      - type: entity
+        entity: light.2_light
+      - type: entity
+        entity: light.3_light
+      - type: entity
+        entity: light.4_light
+      - type: entity
+        entity: light.5_light
+      - type: entity
+        entity: light.6_light
+      - type: entity
+        entity: light.7_light
+      - type: entity
+        entity: light.8_light

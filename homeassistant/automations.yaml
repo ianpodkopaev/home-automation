@@ -5,6 +5,9 @@
       topic: "virtual/+/set"
     - platform: mqtt
       topic: "virtual/+/brightness/set"
+    - platform: mqtt
+      topic: "virtual/+/custom/set"
+      
 
   variables:
     lamp_number: "{{ trigger.topic.split('/')[1] }}"
@@ -15,6 +18,16 @@
   action:
     - choose:
         - conditions: "{{ 'brightness' in trigger.topic }}"
+          sequence:
+            - condition: template
+              value_template: >
+                {{ states[lamp_entity].attributes.brightness != trigger.payload | int }}
+            - service: light.turn_on
+              target:
+                entity_id: "{{ lamp_entity }}"
+              data:
+                brightness: "{{ trigger.payload | int }}"
+        - conditions: "{{ 'custom' in trigger.topic }}"
           sequence:
             - condition: template
               value_template: >
@@ -38,7 +51,7 @@
   mode: single
   trigger:
     - platform: time_pattern
-      seconds: "/30"  # every minute
+      seconds: "/1" 
   action:
     - repeat:
         count: 8

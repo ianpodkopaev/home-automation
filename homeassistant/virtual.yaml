@@ -5,7 +5,6 @@
     support_brightness: true
     initial_brightness: 100
     initial_availability: true
-
   - platform: light
     name: 2 Light
     initial_value: 'on'

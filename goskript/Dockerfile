@@ -7,7 +7,6 @@ COPY . .
 RUN go mod tidy
 RUN go build -o goskript .
 
-# Финальный образ с новой glibc
 FROM debian:bookworm-slim
 
 WORKDIR /app
